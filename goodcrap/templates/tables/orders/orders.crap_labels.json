@@ -1,0 +1,10 @@
+{
+    "order_number": "ssn",
+    "order_date": "date",
+    "shipping_date": "date",
+    "order_status": "word",
+    "product": "word",
+    "quantity_ordered": "random_int",
+    "unit_price": "random_number",
+    "customer_number": ""
+}

@@ -1,0 +1,6 @@
+drafts/*
+build/*
+*.csv
+dist/*
+*.pyc
+*.egg-info*

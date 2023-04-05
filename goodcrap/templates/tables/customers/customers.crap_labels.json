@@ -1,0 +1,24 @@
+{
+    "customer_number": "ssn",
+    "first_name": "first_name",
+    "last_name": "last_name",
+    "phone": "phone_number",
+    "address_line": "street_address",
+    "city": "city",
+    "state": "state",
+    "postalcode": "postalcode",
+    "country": "current_country",
+    "date_of_birth": "date",
+    "credit_limit": {
+        "type": "random_int",
+        "min": 0,
+        "max": 1000,
+        "multiplier": 10
+    },
+    "income": {
+        "type": "random_int",
+        "min": 0,
+        "max": 10000,
+        "multiplier": 10
+    }
+}

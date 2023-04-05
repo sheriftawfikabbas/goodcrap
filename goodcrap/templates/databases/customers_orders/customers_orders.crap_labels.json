@@ -1,0 +1,26 @@
+{
+    "customers": {
+        "customer_number": "ssn",
+        "first_name": "first_name",
+        "last_name": "last_name",
+        "phone": "phone_number",
+        "address_line": "street_address",
+        "city": "city",
+        "state": "state",
+        "postalcode": "postalcode",
+        "country": "current_country",
+        "date_of_birth": "date",
+        "credit_limit": "random_number",
+        "income": "random_number"
+    },
+    "orders": {
+        "order_number": "ssn",
+        "order_date": "date",
+        "shipping_date": "date",
+        "order_status": "word",
+        "product": "word",
+        "quantity_ordered": "random_int",
+        "unit_price": "random_number",
+        "customer_number": ""
+    }
+}
