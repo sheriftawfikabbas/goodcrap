@@ -12,9 +12,9 @@ setup(
     entry_points={
         "console_scripts": ["goodcrap=goodcrap.cli:execute_cli"],
     },
-    version='0.1.2',
+    version='0.1.3',
     license='gpl-3.0',
-    description='goodcrap generates controlled random data.',
+    description='goodcrap creates tables, databases and csv files and fill them with random data',
     long_description=README,
     long_description_content_type='text/markdown',
     author='Sherif Abdulkader Tawfik Abbas',
