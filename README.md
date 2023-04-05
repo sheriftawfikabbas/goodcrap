@@ -10,7 +10,7 @@ While public datasets, such as those hosted at Google or Kaggle, is a common sta
 
 Public datasets are also utilized by data engineers who are interested in testing their ETL/ELT pipelines. Those folks are particularly interested in data quantity, more than quality. Most public datasets are limited in quantity, which make them not so useful for testing pipelines or for benchmarking query execution times.
 
-Nowadays, generating random data is increasingly a requirement for data teams. [It is a better alternative to using public datasets that require cleaning]{https://motherduck.com/blog/python-faker-duckdb-exploration/}.
+Nowadays, generating random data is increasingly a requirement for data teams. [It is a better alternative to using public datasets that require cleaning](https://motherduck.com/blog/python-faker-duckdb-exploration/).
 
 `goodcrap` was developed to enable:
 - AI learners to generate their own custom datasets
