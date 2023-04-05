@@ -16,7 +16,7 @@ setup(
     license='gpl-3.0',
     description='goodcrap generates controlled random data.',
     long_description=README,
-    long_description_content_type='text/markdown'
+    long_description_content_type='text/markdown',
     author='Sherif Abdulkader Tawfik Abbas',
     author_email='sherif.tawfic@gmail.com',
     url='https://github.com/goodcrap/goodcrap',
