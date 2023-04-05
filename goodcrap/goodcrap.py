@@ -96,7 +96,6 @@ class GoodCrap:
                 database_sql=self.database_sql, database_crap_labels=self.database_crap_labels)
 
     def write_csv(self, table_name=None, table_crap_labels=None, database_crap_labels=None):
-        print(table_name, table_crap_labels)
         import pandas as pd
         if table_crap_labels is not None and database_crap_labels is None:
             if type(table_crap_labels) is str:

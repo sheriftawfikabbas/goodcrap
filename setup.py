@@ -8,7 +8,7 @@ setup(
     entry_points={
         "console_scripts": ["goodcrap=goodcrap.cli:execute_cli"],
     },
-    version='0.1.1',
+    version='0.1.2',
     license='gpl-3.0',
     description='goodcrap generates controlled random data.',
     author='Sherif Abdulkader Tawfik Abbas',
