@@ -15,8 +15,9 @@ class GoodCrap:
         size,
         seed,
         template_table=None,
-        to_csv=None,
-        to_json=None,
+        to_csv=False,
+        to_json=False,
+        to_parquet=False,
         database_config=None,
         template_database=None,
         table_sql=None,
@@ -30,6 +31,7 @@ class GoodCrap:
         self.size = size
         self.to_csv = to_csv
         self.to_json = to_json
+        self.to_parquet = to_parquet
         self.template_table = template_table
         self.template_database = template_database
         self.table_sql = table_sql
@@ -89,7 +91,7 @@ class GoodCrap:
         elif self.table_sql is None and self.table_crap_labels is not None and self.database_instance is None:
             table_name = os.path.basename(
                 self.table_crap_labels).replace('.json', '')
-            self.write_csv(table_name=table_name,
+            self.write_file(table_name=table_name,
                            table_crap_labels=self.table_crap_labels)
 
     def run_template_table(self):
@@ -106,12 +108,12 @@ class GoodCrap:
                     table_sql=self.table_sql, table_crap_labels=self.table_crap_labels)
         else:
             # Generate csv files only
-            self.table_crap_labels = self.template_path + '/tables/' + \
+            self.table_crap_labels = self.templates_path + '/tables/' + \
                 self.template_table+'/'+self.template_table+'.crap_labels.json'
             with open(self.table_crap_labels, 'r') as f:
                 self.table_crap_labels = json.load(f)
                 f.close()
-            self.write_csv(table_name=self.template_table,
+            self.write_file(table_name=self.template_table,
                            table_crap_labels=self.table_crap_labels)
 
     def _set_template_table_variables(self):
@@ -220,7 +222,7 @@ class GoodCrap:
     def _is_run_with_mage(self):
         return self.mage_pipeline is not None
 
-    def write_csv(self, table_name=None, table_crap_labels=None, database_crap_labels=None):
+    def write_file(self, table_name=None, table_crap_labels=None, database_crap_labels=None):
         import pandas as pd
         if table_crap_labels is not None and database_crap_labels is None:
             fm = RandomMapper(
@@ -229,7 +231,16 @@ class GoodCrap:
             for i in range(int(self.size)):
                 data_csv += [fm.get_crap()]
             df = pd.DataFrame(data_csv, columns=table_crap_labels.keys())
-            df.to_csv(table_name+'.csv')
+            if self.to_json:
+                with open(table_name+'.json','w') as f:
+                    f.write(df.to_json())
+                print('Data written to a json file')
+            elif self.to_parquet:
+                df.to_parquet(table_name + '.parquet', engine = 'pyarrow', compression = 'gzip')
+                print('Data written to a parquet file')
+            else:
+                df.to_csv(table_name+'.csv')
+                print('Data written to a csv file')
         elif table_crap_labels is None and database_crap_labels is not None:
             pass
 

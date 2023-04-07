@@ -73,15 +73,25 @@ class CLI:
         parser.add_argument(
             "--to_csv",
             action="store_const",
-            const='to_csv',
-            help="stores data to a csv file",
+            default=False,
+            const=True,
+            help="write data to a csv file",
         )
 
         parser.add_argument(
             "--to_json",
             action="store_const",
-            const='to_json',
-            help="stores data to a csv file",
+            default=False,
+            const=True,
+            help="write data to a json file",
+        )
+
+        parser.add_argument(
+            "--to_parquet",
+            action="store_const",
+            default=False,
+            const=True,
+            help="write data to a parquet file",
         )
 
         parser.add_argument(
@@ -149,6 +159,7 @@ class CLI:
                              seed=arguments.seed,
                              to_csv=arguments.to_csv,
                              to_json=arguments.to_json,
+                             to_parquet=arguments.to_parquet,
                              template_database=arguments.template_database,
                              template_table=arguments.template_table,
                              database_config=arguments.database_config,
