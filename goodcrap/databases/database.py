@@ -28,16 +28,13 @@ class DataBase:
             with open(table_sql, 'r') as f:
                 self.table_sql = f.read()
                 f.close()
-            with open(table_crap_labels, 'r') as f:
-                self.table_crap_labels = json.load(f)
-                f.close()
             self.connection.execute(self.table_sql)
             metadata = MetaData(bind=self.engine)
 
             table = Table(table_name, metadata, autoload=True)
 
             fm = RandomMapper(self.seed, self.table_crap_labels,
-                             table, engine=self.engine)
+                              table, engine=self.engine)
 
             data_csv = []
             for i in range(self.size):
@@ -50,12 +47,9 @@ class DataBase:
                 df = pd.DataFrame(data_csv, columns=table.columns)
                 df.to_csv(table_name+'.csv')
 
-        if database_sql is not None and database_crap_labels is not None:
+        elif database_sql is not None and database_crap_labels is not None:
             with open(database_sql, 'r') as f:
                 self.database_sql = f.read()
-                f.close()
-            with open(database_crap_labels, 'r') as f:
-                self.database_crap_labels = json.load(f)
                 f.close()
             self.connection.execute(self.database_sql)
             metadata = MetaData(bind=self.engine)
@@ -65,7 +59,7 @@ class DataBase:
                     table = Table(table_name, metadata, autoload=True)
 
                     fm = RandomMapper(
-                        self.seed, self.database_crap_labels[table_name], table, self.engine)
+                        self.seed, database_crap_labels[table_name], table, self.engine)
 
                     data_csv = []
                     for i in range(int(self.size/rounds)):
@@ -77,3 +71,6 @@ class DataBase:
                     if self.database_config['to_csv']:
                         df = pd.DataFrame(data_csv, columns=table.columns)
                         df.to_csv(table_name+'.csv')
+
+    def execute(self, sql):
+        return self.engine.execute(sql)

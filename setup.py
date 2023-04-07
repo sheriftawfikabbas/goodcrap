@@ -3,6 +3,7 @@ from pathlib import Path
 
 here = Path(__file__).resolve().parent
 README = (here / "README.md").read_text(encoding="utf-8")
+VERSION = (here / "VERSION").read_text(encoding="utf-8").strip()
 
 setup(
     name='goodcrap',
@@ -12,7 +13,7 @@ setup(
     entry_points={
         "console_scripts": ["goodcrap=goodcrap.cli:execute_cli"],
     },
-    version='0.1.3',
+    version=VERSION,
     license='gpl-3.0',
     description='goodcrap creates tables, databases and csv files and fill them with random data',
     long_description=README,
@@ -22,6 +23,6 @@ setup(
     url='https://github.com/goodcrap/goodcrap',
     keywords=['ai', 'data engineering', 'fake data',
               'data science'],
-    install_requires=['sqlalchemy','faker','pandas','numpy'],
+    install_requires=['sqlalchemy', 'faker', 'pandas', 'numpy', 'jinja2'],
 
 )

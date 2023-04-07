@@ -7,7 +7,7 @@ import sys
 import textwrap
 from pathlib import Path
 from typing import Dict, List, Optional, TextIO, TypeVar, Union
-
+from . import VERSION
 
 class CLI:
     def __init__(self, argv: Optional[str] = None) -> None:
@@ -15,7 +15,7 @@ class CLI:
         self.prog_name = Path(self.argv[0]).name
         self.formatter_class = argparse.RawDescriptionHelpFormatter
         self.epilog = 'Epilogue'
-        self.version = '0.1.0'
+        self.version = VERSION
 
         default_locale = os.environ.get("LANG", "en_US").split(".")[0]
         # if default_locale not in AVAILABLE_LOCALES:
@@ -92,38 +92,53 @@ class CLI:
         )
 
         parser.add_argument(
-            "--table_sql",
             "-q",
+            "--table_sql",
             type=str,
             help="name of sql file that includes the table data definition statements",
         )
 
         parser.add_argument(
-            "--table_crap_labels",
             "-l",
+            "--table_crap_labels",
             type=str,
             help="name of json file that includes the configuration of the table to be filled",
         )
 
         parser.add_argument(
-            "--database_sql",
             "-Q",
+            "--database_sql",
             type=str,
             help="name of sql file that includes the data definition statements of the table in the database",
         )
 
         parser.add_argument(
-            "--database_crap_labels",
             "-L",
+            "--database_crap_labels",
             type=str,
             help="name of json file that includes the configuration of the table to be filled",
         )
 
         parser.add_argument(
-            "--guess_crap_labels",
             "-g",
+            "--guess_crap_labels",
             type=str,
             help="infer the crap labels from the data in the provided csv file",
+        )
+
+        parser.add_argument(
+            "-M",
+            "--mage_project",
+            type=str,
+            help="generate a new mage project",
+        )
+
+        parser.add_argument(
+            "-P",
+            "--mage_pipeline",
+            action="store_const",
+            const='mage_pipeline',
+            help="generate a new mage pipeline in the current mage project",
         )
 
         arguments = parser.parse_args(self.argv[1:])
@@ -140,15 +155,17 @@ class CLI:
                              table_sql=arguments.table_sql,
                              table_crap_labels=arguments.table_crap_labels,
                              database_sql=arguments.database_sql,
-                             database_crap_labels=arguments.database_crap_labels
+                             database_crap_labels=arguments.database_crap_labels,
+                             mage_project_name=arguments.mage_project,
+                             mage_pipeline=arguments.mage_pipeline
                              )
 
         good_crap.run()
 
 
-
 def execute_cli(argv: Optional[str] = None) -> None:
     cli = CLI()
+
 
 if __name__ == "__main__":
     execute_cli()

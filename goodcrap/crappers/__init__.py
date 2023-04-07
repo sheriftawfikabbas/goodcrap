@@ -1,23 +1,10 @@
 import numpy as np
-
-def get_crap(crap_label):
-    if crap_label == 'goodcrap_salary':
-        pass
-    elif crap_label == 'goodcrap_creditlimit':
-        pass
-    elif crap_label == 'goodcrap_networth':
-        pass
-    elif crap_label == 'goodcrap_valuation':
-        pass
-    elif crap_label == 'goodcrap_shareprice':
-        pass
-    elif crap_label == 'goodcrap_salary':
-        pass
-    elif crap_label == 'goodcrap_salary':
-        pass
+import uuid
 
 def crapper_unique(props: dict):
-    pass
+    if props['type'] == 'serial':
+        return uuid.uuid4()
+    
 
 def crapper(props: dict):
     decimals = 2

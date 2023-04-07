@@ -1,6 +1,6 @@
 # `goodcrap`
 
-`goodcrap` is a python package that generates tables, databases or `csv` files and fill them with random, or fake, data.
+`goodcrap` is a python package that generates data structures (tables, databases and `csv` files) and fill them with random data, or generates [`Mage`](https://github.com/mage-ai/mage-ai) pipelines that the user can use to orchestrate filling the data structures.
 
 ## Motivation
 
@@ -82,7 +82,15 @@ The class `GoodCrap` is your `goodcrap` interface. You instantiate it with the k
 - `get_dataframe()`: returns a `pandas` `DataFrame` object populated with the random data
 - `run()`: that's the more generic function that can generate tables and databases and populate them
 
-And example usage for the `goodcrap` library is as follows:
+And example usage for the `goodcrap` library is as follows. Here we are generating a `pandas` `DataFrame` for one of the template tables, `customers`:
+
+```python
+from goodcrap import GoodCrap
+a = GoodCrap(seed=3,size=1000,template_table='customers')
+df=a.get_dataframe()
+```
+
+The following example generates the data frame for some table, given its `crap_label` configuration object:
 
 ```python
 
@@ -114,13 +122,21 @@ craplabels = {
 df = gc.get_dataframe('customers',craplabels)
 ```
 
-## How data for a foreign key is generated
+## How data for a foreign key column is generated
 
 `goodcrap` will detect whether a column in a table is related to another table, and will fill that column with random selections of the related column. To demonstrate, run this command:
 
 `goodcrap --size 1000 --seed 3 --database_config examples\mysql_config --template_database customers_orders`
 
 This command will use the database settings in `examples\mysql_config.json` to generate the template database `customers_orders` and fill the tables with 1000 rows each. There are two tables here: `customers` and `orders`, and they are related: `orders` has a column `customer_number` that is tied to `customers` via the foreign key `customers.customer_number`. Therefore, that column is filled with random selections from `customers.customer_number`.
+
+For a quick demo of generating the `orders` table: assuming you have setup up the `customers_orders` database and filled it with some data, the following code will generate an `orders` `DataFrame` using columns values from the `customers` table:
+
+```python
+from goodcrap import GoodCrap
+a = GoodCrap(seed=3,size=1000,template_table='orders',database_config="../examples/mysql_config")
+df=a.get_dataframe()
+```
 
 ## `goodcrap` with `Mage`
 
@@ -175,6 +191,19 @@ def test_output(output, *args) -> None:
     assert output is not None, 'The output is undefined'
 
 ```
+*Note:* If you are planning to run a `Mage` pipeline multiple times, then make sure that it does not have columns that are generated using the faker.unique function. The columns should be universally unique.
+
+## `goodcrap` generates `Mage` pipelines
+
+`Mage` python files are generated using `Jinja` templates. Here is an example command to generate pipelines for each of the tables in the template database `customers_orders`:
+
+`goodcrap --size 1000 --seed 3 --database_config examples\mysql_config --template_database customers_orders --mage_pipeline`
+
+Note that `goodcrap` currently will only generate `Mage` projects if the database configurations are defined.
+
+## Data warehouses
+
+Some dimensions in data warehouses will required to be filled as part of the testing exercise, but should not be filled with random data. These are the *conformed* dimensions with rigid data, such as the Date, Countries, and Cities dimensions. `goodcrap` will be able to fill these dimensions using the `DimensionFiller` class. Filling these tables will be performed before any other table is populated.
 
 ## Guessing the `crap_labels.json` settings
 
@@ -184,7 +213,7 @@ def test_output(output, *args) -> None:
 
 *in progress*
 
-## Contrinuting to `goodcrap`
+## Contributing to `goodcrap`
 
 That would be much appreciated. Check [here](CONTRIBUTING.rst).
 

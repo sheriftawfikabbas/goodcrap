@@ -4,7 +4,6 @@ from .crappers import crapper, crapper_unique
 
 fake = faker.Faker('en-US')
 
-
 class RandomMapper:
     """
     Maps a table column to a Faker
@@ -19,7 +18,6 @@ class RandomMapper:
         primary_keys = []
         fks = {}
         if engine is not None and table is not None:
-            
             for f in table.foreign_keys:
                 print('Table has foreign key to', f.column.table)
                 metadata = MetaData(bind=self.engine)
@@ -44,7 +42,7 @@ class RandomMapper:
                     import random
                     # Get a random key from the related table
                     self.faker_generator += [
-                        lambda: random.sample(fks[column_name], 1)]
+                        lambda: random.sample(fks[column_name], 1)[0]]
                 elif not cl.startswith('goodcrap_'):
                     if column_name in primary_keys:
                         self.faker_generator += [getattr(fake.unique,
