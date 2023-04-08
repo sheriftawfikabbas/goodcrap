@@ -1,7 +1,5 @@
-from .database import DataBase
 from sqlalchemy import create_engine
-import sqlite3
-from sqlite3 import Error
+from .database import DataBase
 
 class SQLite(DataBase):
     def __init__(self, database_config) -> None:

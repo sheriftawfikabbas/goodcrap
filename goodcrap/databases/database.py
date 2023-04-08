@@ -1,11 +1,11 @@
+import json
+import os
+import pandas as pd
 import sqlalchemy
 from sqlalchemy import MetaData, Table, Column, Integer, String
 from sqlalchemy.sql import text
 
 from ..random_mapper import RandomMapper
-import json
-import os
-import pandas as pd
 
 
 class DataBase:
@@ -22,7 +22,8 @@ class DataBase:
     def set_seed(self, seed):
         self.seed = seed
 
-    def run(self, table_sql=None, table_crap_labels=None, database_sql=None, database_crap_labels=None):
+    def run(self, table_sql=None, table_crap_labels=None,
+            database_sql=None, database_crap_labels=None):
         if table_sql is not None and table_crap_labels is not None:
             table_name = os.path.basename(table_sql).split('.')[0]
             with open(table_sql, 'r') as f:

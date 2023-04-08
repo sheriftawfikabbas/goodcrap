@@ -203,7 +203,7 @@ Note that `goodcrap` currently will only generate `Mage` projects if the databas
 
 ## Data warehouses
 
-Some dimensions in data warehouses will required to be filled as part of the testing exercise, but should not be filled with random data. These are the *conformed* dimensions with rigid data, such as the Date, Countries, and Cities dimensions. `goodcrap` will be able to fill these dimensions using the `DimensionFiller` class. Filling these tables will be performed before any other table is populated.
+Some dimensions in data warehouses will required to be filled as part of the testing exercise, but should not be filled with random data. These are the *conformed* dimensions with rigid data, such as the Date, Countries, and Cities dimensions. `goodcrap` will be able to fill these dimensions using the `DimensionFiller` class by providing several options for featurization. Filling these tables will be performed before any other table is populated.
 
 ## Guessing the `crap_labels.json` settings
 

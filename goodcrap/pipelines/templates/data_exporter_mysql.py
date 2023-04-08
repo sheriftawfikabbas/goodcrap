@@ -19,7 +19,7 @@ def export_data_to_mysql(df: DataFrame, **kwargs) -> None:
     table_name = '{{ table_name }}'  # Specify the name of the table to export data to
     config_path = path.join(get_repo_path(), 'io_config.yaml')
     config_profile = 'default'
-    
+
     with MySQL.with_config(ConfigFileLoader(config_path, config_profile)) as loader:
         loader.export(
             df,

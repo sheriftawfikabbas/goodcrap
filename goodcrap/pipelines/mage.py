@@ -1,6 +1,6 @@
-from jinja2 import Environment, FileSystemLoader
-import subprocess
 import os
+import subprocess
+from jinja2 import Environment, FileSystemLoader
 from ..databases.mysql import MySQL
 from ..databases.sqlite import SQLite
 
@@ -30,8 +30,12 @@ class MageProject:
             print('Successfully generating the Mage project', project_name)
 
     def generate_pipeline(self, size, seed, table_name, crap_labels) -> None:
-        # Note: If you are planning to run a pipeline multiple times, then make sure that it does not
-        # have columns that are generated using the faker.unique function. Those columns should be universally unique.
+        '''
+        Note: If you are planning to run a pipeline multiple times, 
+        then make sure that it does nothave columns that are 
+        generated using the faker.unique function. Those columns 
+        should be universally unique.
+        '''
         self.size = size
         self.seed = seed
         self.table_name = table_name

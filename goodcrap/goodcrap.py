@@ -58,7 +58,7 @@ class GoodCrap:
         self.database_instance = None
 
         if database_config is not None:
-            if type(database_config) is str:
+            if isinstance(database_config, str):
                 fdatabase_config = open(database_config+'.json', 'r')
                 database_config = json.load(fdatabase_config)
                 fdatabase_config.close()
@@ -74,12 +74,15 @@ class GoodCrap:
                 self.database_instance.set_size(self.size)
                 self.database_instance.set_seed(self.seed)
 
-    # The function will generate random data given that only one of the following is supplied:
-    # - table_sql and table_crap_labels, or
-    # - database_sql and database_crap_labels, or
-    # - template_table, or
-    # - template_database
     def run(self):
+        '''
+        The function will generate random data given that 
+        only one of the following is supplied:
+        - table_sql and table_crap_labels, or
+        - database_sql and database_crap_labels, or
+        - template_table, or
+        - template_database
+        '''
         if self.template_table is not None:
             self.run_template_table()
         elif self.template_database is not None:
@@ -88,11 +91,12 @@ class GoodCrap:
             self.run_table()
         elif self.database_sql is not None and self.database_crap_labels is not None:
             self.run_database()
-        elif self.table_sql is None and self.table_crap_labels is not None and self.database_instance is None:
+        elif self.table_sql is None and self.table_crap_labels is not None\
+                and self.database_instance is None:
             table_name = os.path.basename(
                 self.table_crap_labels).replace('.json', '')
             self.write_file(table_name=table_name,
-                           table_crap_labels=self.table_crap_labels)
+                            table_crap_labels=self.table_crap_labels)
 
     def run_template_table(self):
         if self.database_instance is not None:
@@ -114,7 +118,7 @@ class GoodCrap:
                 self.table_crap_labels = json.load(f)
                 f.close()
             self.write_file(table_name=self.template_table,
-                           table_crap_labels=self.table_crap_labels)
+                            table_crap_labels=self.table_crap_labels)
 
     def _set_template_table_variables(self):
         self.table_sql = self.templates_path + '/tables/' + \
@@ -139,20 +143,20 @@ class GoodCrap:
                               database_crap_labels=self.database_crap_labels)
             else:
                 self.database_instance.run(
-                    database_sql=self.database_sql, database_crap_labels=self.database_crap_labels)
+                    database_sql=self.database_sql,
+                    database_crap_labels=self.database_crap_labels)
         else:
             print("WOOPS: You should provide a database configuration file.")
 
     def run_table(self):
         if self.database_instance is not None:
             if self._is_run_with_mage():
-                # Mage can create the table on the fly if the table doesn't exist,
-                # so no need for the sql create statement.
                 self.run_mage(table_sql=self.table_sql,
                               table_crap_labels=self.table_crap_labels)
             elif self.table_sql is not None:
                 self.database_instance.run(
-                    table_sql=self.table_sql, table_crap_labels=self.table_crap_labels)
+                    table_sql=self.table_sql,
+                    table_crap_labels=self.table_crap_labels)
             else:
                 print(
                     "WOOPS: You should provide the table CREATE statement sql file (--table_sql).")
@@ -167,16 +171,25 @@ class GoodCrap:
                               database_crap_labels=self.database_crap_labels)
             else:
                 self.database_instance.run(
-                    database_sql=self.database_sql, database_crap_labels=self.database_crap_labels)
+                    database_sql=self.database_sql,
+                    database_crap_labels=self.database_crap_labels)
         else:
             print("WOOPS: You should provide a database configuration file.")
 
-    def run_mage(self, table_sql=None, table_crap_labels=None, database_sql=None, database_crap_labels=None):
-        # Choosing Mage means that the data will not be generated using goodcrap,
-        # but will be generated in Mage pipelines by the user.
-        # However, the tables will be created in the target database.
+    def run_mage(self, table_sql=None, table_crap_labels=None, database_sql=None,
+                 database_crap_labels=None):
+        '''
+        Choosing Mage means that the data will not be generated using goodcrap,
+        but will be generated in Mage pipelines by the user.
+        However, the tables will be created in the target database.
+
+        Mage can create the table on the fly if the table doesn't exist,
+        so no need for the sql create statement.
+        '''
         if self.mage_project_name is not None:
-            # If the mage project doesn't exist, create it then add the pipeline to it. Otherwise, just add the pipeline to the existing mage project.
+            # If the mage project doesn't exist, create it then add the
+            # pipeline to it. Otherwise, just add the pipeline
+            # to the existing mage project.
             if self.mage_project is None:
                 self.create_mage_project()
             if table_sql is not None and table_crap_labels is not None:
@@ -222,7 +235,9 @@ class GoodCrap:
     def _is_run_with_mage(self):
         return self.mage_pipeline is not None
 
-    def write_file(self, table_name=None, table_crap_labels=None, database_crap_labels=None):
+    def write_file(self, table_name=None,
+                   table_crap_labels=None,
+                   database_crap_labels=None):
         import pandas as pd
         if table_crap_labels is not None and database_crap_labels is None:
             fm = RandomMapper(
@@ -232,11 +247,12 @@ class GoodCrap:
                 data_csv += [fm.get_crap()]
             df = pd.DataFrame(data_csv, columns=table_crap_labels.keys())
             if self.to_json:
-                with open(table_name+'.json','w') as f:
+                with open(table_name+'.json', 'w') as f:
                     f.write(df.to_json())
                 print('Data written to a json file')
             elif self.to_parquet:
-                df.to_parquet(table_name + '.parquet', engine = 'pyarrow', compression = 'gzip')
+                df.to_parquet(table_name + '.parquet',
+                              engine='pyarrow', compression='gzip')
                 print('Data written to a parquet file')
             else:
                 df.to_csv(table_name+'.csv')
@@ -244,13 +260,14 @@ class GoodCrap:
         elif table_crap_labels is None and database_crap_labels is not None:
             pass
 
-    def get_dataframe(self, table_name=None, table_crap_labels=None):
+    def get_dataframe(self, table_name=None,
+                      table_crap_labels=None):
         import pandas as pd
         if self.template_table is not None:
             table_name = self.template_table
             self._set_template_table_variables()
             table_crap_labels = self.table_crap_labels
-        if type(table_crap_labels) is str:
+        if isinstance(table_crap_labels, str):
             with open(table_crap_labels, 'r') as f:
                 table_crap_labels = json.load(f)
                 f.close()
@@ -270,8 +287,12 @@ class GoodCrap:
 
     def create_mage_project(self):
         self.mage_project = MageProject(
-            project_name=self.mage_project_name, database_config=self.database_config, database_instance=self.database_instance)
+            project_name=self.mage_project_name,
+            database_config=self.database_config,
+            database_instance=self.database_instance)
 
     def create_mage_pipeline(self, table_name, crap_labels):
         self.mage_project.generate_pipeline(
-            seed=self.seed, size=self.size, table_name=table_name, crap_labels=crap_labels)
+            seed=self.seed, size=self.size,
+            table_name=table_name,
+            crap_labels=crap_labels)

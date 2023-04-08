@@ -1,3 +1,8 @@
+/*
+This data warehouse is greatly inspired by the Oracle sample data warehouse:
+https://docs.oracle.com/cd/A91034_01/DOC/server.901/a90237/appb.htm
+*/
+
 /*Dimension: times */
 
 CREATE TABLE times (
@@ -63,25 +68,27 @@ CREATE TABLE countries (
     country_region VARCHAR2(20)
 );
 
+/*Dimension: customers */
 CREATE TABLE customers (
     cust_id NUMBER,
-    cust_first_name VARCHAR2(20) CONSTRAINT customer_fname_nn NOT NULL,
-    cust_last_name VARCHAR2(40) CONSTRAINT customer_lname_nn NOT NULL,
+    cust_first_name VARCHAR2(20) NOT NULL,
+    cust_last_name VARCHAR2(40) NOT NULL,
     cust_gender CHAR(1),
     cust_year_of_birth NUMBER(4),
     cust_marital_status VARCHAR2(20),
-    cust_street_address VARCHAR2(40) CONSTRAINT customer_st_addr_nn NOT NULL,
-    cust_postal_code VARCHAR2(10) CONSTRAINT customer_pcode_nn NOT NULL,
-    cust_city VARCHAR2(30) CONSTRAINT customer_city_nn NOT NULL,
+    cust_street_address VARCHAR2(40) NOT NULL,
+    cust_postal_code VARCHAR2(10) NOT NULL,
+    cust_city VARCHAR2(30) NOT NULL,
     cust_state_province VARCHAR2(40),
-    country_id CHAR(2) CONSTRAINT customer_country_id_nn NOT NULL,
+    country_id CHAR(2) NOT NULL,
     cust_main_phone_number VARCHAR2(25),
     cust_income_level VARCHAR2(30),
     cust_credit_limit NUMBER,
     cust_email VARCHAR2(30)
 );
 
-REM creation of dimension table PRODUCTS...CREATE TABLE products (
+/*Dimension: products */
+CREATE TABLE products (
     prod_id NUMBER(6),
     prod_name VARCHAR2(50) CONSTRAINT products_prod_name_nn NOT NULL,
     prod_desc VARCHAR2(4000) CONSTRAINT products_prod_desc_nn NOT NULL,
@@ -98,7 +105,8 @@ REM creation of dimension table PRODUCTS...CREATE TABLE products (
     prod_min_price NUMBER(8, 2) CONSTRAINT products_prod_min_price_nn NOT NULL
 );
 
-REM creation of fact table SALES...CREATE TABLE sales (
+/*Dimension: sales */
+CREATE TABLE sales (
     prod_id NUMBER(6) CONSTRAINT sales_product_nn NOT NULL,
     cust_id NUMBER CONSTRAINT sales_customer_nn NOT NULL,
     time_id DATE CONSTRAINT sales_time_nn NOT NULL,
@@ -107,47 +115,8 @@ REM creation of fact table SALES...CREATE TABLE sales (
     quantity_sold NUMBER(3) CONSTRAINT sales_quantity_nn NOT NULL,
     amount NUMBER(10, 2) CONSTRAINT sales_amount_nn NOT NULL,
     cost NUMBER(10, 2) CONSTRAINT sales_cost_nn NOT NULL
-) PARTITION BY RANGE (time_id) (
-    PARTITION Q1_1998
-    VALUES
-        LESS THAN (TO_DATE('01-APR-1998', 'DD-MON-YYYY')),
-        PARTITION Q2_1998
-    VALUES
-        LESS THAN (TO_DATE('01-JUL-1998', 'DD-MON-YYYY')),
-        PARTITION Q3_1998
-    VALUES
-        LESS THAN (TO_DATE('01-OCT-1998', 'DD-MON-YYYY')),
-        PARTITION Q4_1998
-    VALUES
-        LESS THAN (TO_DATE('01-JAN-1999', 'DD-MON-YYYY')),
-        PARTITION Q1_1999
-    VALUES
-        LESS THAN (TO_DATE('01-APR-1999', 'DD-MON-YYYY')),
-        PARTITION Q2_1999
-    VALUES
-        LESS THAN (TO_DATE('01-JUL-1999', 'DD-MON-YYYY')),
-        PARTITION Q3_1999
-    VALUES
-        LESS THAN (TO_DATE('01-OCT-1999', 'DD-MON-YYYY')),
-        PARTITION Q4_1999
-    VALUES
-        LESS THAN (TO_DATE('01-JAN-2000', 'DD-MON-YYYY')),
-        PARTITION Q1_2000
-    VALUES
-        LESS THAN (TO_DATE('01-APR-2000', 'DD-MON-YYYY')),
-        PARTITION Q2_2000
-    VALUES
-        LESS THAN (TO_DATE('01-JUL-2000', 'DD-MON-YYYY')),
-        PARTITION Q3_2000
-    VALUES
-        LESS THAN (TO_DATE('01-OCT-2000', 'DD-MON-YYYY')),
-        PARTITION Q4_2000
-    VALUES
-        LESS THAN (MAXVALUE)
 );
 
-REM A foreign - key relationship between SALES
-and PROMOTIONS is REM intentionally omitted to demonstrate more sophisticated query REM rewrite mechanisms
 ALTER TABLE
     sales
 ADD
@@ -157,5 +126,3 @@ ADD
         CONSTRAINT sales_time_fk FOREIGN KEY (time_id) REFERENCES times,
         CONSTRAINT sales_channel_fk FOREIGN KEY (channel_id) REFERENCES channels
     );
-
-COMMIT;
