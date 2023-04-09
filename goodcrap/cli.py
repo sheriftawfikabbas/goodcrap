@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, TextIO, TypeVar, Union
 from . import VERSION
 
+
 class CLI:
     def __init__(self, argv: Optional[str] = None) -> None:
         self.argv = argv or sys.argv[:]
@@ -151,6 +152,13 @@ class CLI:
             help="generate a new mage pipeline in the current mage project",
         )
 
+        parser.add_argument(
+            "--queries",
+            default=0,
+            type=int,
+            help="generate random SQL queries",
+        )
+
         arguments = parser.parse_args(self.argv[1:])
         random.seed(arguments.seed)
 
@@ -168,7 +176,8 @@ class CLI:
                              database_sql=arguments.database_sql,
                              database_crap_labels=arguments.database_crap_labels,
                              mage_project_name=arguments.mage_project,
-                             mage_pipeline=arguments.mage_pipeline
+                             mage_pipeline=arguments.mage_pipeline,
+                             queries=arguments.queries
                              )
 
         good_crap.run()

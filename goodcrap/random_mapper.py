@@ -19,8 +19,8 @@ class RandomMapper:
         fks = {}
         if engine is not None and table is not None:
             for f in table.foreign_keys:
-                print('Table has foreign key to', f.column.table)
                 metadata = MetaData(bind=self.engine)
+                # metadata.reflect(self.engine): That's for version > 2
                 rel_table = Table(f.column.table, metadata, autoload=True)
                 results = self.engine.connect().execute(
                     select(rel_table.c[f.column.name])).fetchall()

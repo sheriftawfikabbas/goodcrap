@@ -5,7 +5,6 @@ def crapper_unique(props: dict):
     if props['type'] == 'serial':
         return uuid.uuid4()
     
-
 def crapper(props: dict):
     decimals = 2
     multiplier = 1

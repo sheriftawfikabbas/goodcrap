@@ -6,7 +6,6 @@ from .random_mapper import RandomMapper
 from .pipelines.mage import MageProject
 from . import templates
 
-
 class GoodCrap:
     seed = None
 
@@ -25,7 +24,8 @@ class GoodCrap:
         database_sql=None,
         database_crap_labels=None,
         mage_project_name=None,
-        mage_pipeline=None
+        mage_pipeline=None,
+        queries=False
     ) -> None:
         GoodCrap.seed = seed
         self.size = size
@@ -40,6 +40,7 @@ class GoodCrap:
         self.database_crap_labels = database_crap_labels
         self.mage_project_name = mage_project_name
         self.mage_pipeline = mage_pipeline
+        self.queries = queries
 
         self.templates_path = os.path.dirname(templates.__file__)
 
@@ -64,6 +65,8 @@ class GoodCrap:
                 fdatabase_config.close()
             database_config['to_csv'] = self.to_csv
             database_config['to_json'] = self.to_json
+            database_config['to_parquet'] = self.to_parquet
+            database_config['queries'] = self.queries
             self.database_config = database_config
             if database_config['db_type'] == 'sqlite':
                 self.database_instance = SQLite(database_config)

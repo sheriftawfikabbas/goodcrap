@@ -1,10 +1,10 @@
 # `goodcrap`
 
-`goodcrap` is a python package that generates data structures (tables, databases and `csv` files) and fill them with random data, or generates [`Mage`](https://github.com/mage-ai/mage-ai) pipelines that the user can use to orchestrate filling the data structures.
+`goodcrap` is a python package that generates data structures (tables, databases and `csv` files) and fill them with random data, generates [`Mage`](https://github.com/mage-ai/mage-ai) pipelines that the user can use to orchestrate filling the data structures, and generate random SQL queries.
 
 ## Motivation
 
-This software enables data engineers to replicate the database schemas at their organisations, and then generate fake data that resemble a random sample of the actual data in their organisation.
+This software enables data engineers to replicate the database schemas at their organisations, and then generate fake data that resemble a random sample of the actual data in their organisation. It also enables them to generate any number of random SQL queries that they can use for testing their analytics pipelines, as well as benchmark their data platforms.
 
 While public datasets, such as those hosted at Google or Kaggle, is a common starting point for people interested in learning data analytics and machine learning, many of these datasets require extensive data cleaning so that they can be usable in analytics pipelines. This makes the use of these datasets difficult for AI learners and practitioners.
 
@@ -38,7 +38,7 @@ The simplest use-case scenario is generating a `csv` file with random data. `goo
 
 The file `customers.csv` will be generated. 
 
-`goodcrap` populate databases with crap, in addition to filling `csv` files. You can set `goodcrap` to connect to your database via a database configuration file, the name of which is passed to `goodcrap` via the command line argument `--database_config`. This is a json file that looks like this (for a MySQL database):
+`goodcrap` populate databases with random data, in addition to filling `csv` files. You can set `goodcrap` to connect to your database via a database configuration file, the name of which is passed to `goodcrap` via the command line argument `--database_config`. This is a json file that looks like this (for a MySQL database):
 
 ```json
 {

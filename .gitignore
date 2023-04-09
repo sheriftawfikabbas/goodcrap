@@ -1,6 +1,7 @@
 drafts/*
 build/*
 *.csv
+*.sql
 dist/*
 *.pyc
 *.egg-info*

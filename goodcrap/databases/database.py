@@ -6,7 +6,7 @@ from sqlalchemy import MetaData, Table, Column, Integer, String
 from sqlalchemy.sql import text
 
 from ..random_mapper import RandomMapper
-
+from ..crappers import queries
 
 class DataBase:
     def __init__(self,
@@ -72,6 +72,10 @@ class DataBase:
                     if self.database_config['to_csv']:
                         df = pd.DataFrame(data_csv, columns=table.columns)
                         df.to_csv(table_name+'.csv')
+        if 'queries' in self.database_config.keys():
+            with open('queries.sql','a') as f:
+                for i in range(self.database_config['queries']):
+                    f.write(str(queries.crapper(self.engine))+'\n')
 
     def execute(self, sql):
         return self.engine.execute(sql)
