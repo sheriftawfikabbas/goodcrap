@@ -1,6 +1,6 @@
 # `goodcrap`
 
-`goodcrap` is a python package that generates data structures (tables, databases and `csv` files) and fill them with random data, generates [`Mage`](https://github.com/mage-ai/mage-ai) pipelines that the user can use to orchestrate filling the data structures, and generate random SQL queries.
+`goodcrap` is a python package that generates random data stuff: creates and fills data structures (tables, databases and `csv` files) with random data, generates [`Mage`](https://github.com/mage-ai/mage-ai) pipelines that the user can use to orchestrate filling the data structures, and generate random SQL queries.
 
 ## Motivation
 
