@@ -232,6 +232,12 @@ The bulk upload is obviously preferred. Below is an example configuration settin
 }
 ```
 
+Suppose you want to create the `orders` table in Snowflake and fill it with 1,000,000 rows, and also get a few sample queries to try. You can get all that with the following command:
+
+```
+goodcrap --size 1000000 --seed 12 --database_config config --template_table orders --bulk_upload --queries 100
+```
+
 ## Data warehouses
 
 Some dimensions in data warehouses will required to be filled as part of the testing exercise, but should not be filled with random data. These are the *conformed* dimensions with rigid data, such as the Date, Countries, and Cities dimensions. `goodcrap` will be able to fill these dimensions using the `DimensionFiller` class by providing several options for featurization. Filling these tables will be performed before any other table is populated.
