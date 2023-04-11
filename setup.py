@@ -23,6 +23,11 @@ setup(
     url='https://github.com/goodcrap/goodcrap',
     keywords=['ai', 'data engineering', 'fake data',
               'data science'],
-    install_requires=['sqlalchemy', 'faker', 'pandas', 'numpy', 'jinja2'],
+    install_requires=['sqlalchemy',
+                      'faker',
+                      'pandas',
+                      'numpy',
+                      'jinja2',
+                      'snowflake-sqlalchemy'],
 
 )

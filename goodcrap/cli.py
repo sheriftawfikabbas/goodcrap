@@ -159,6 +159,14 @@ class CLI:
             help="generate random SQL queries",
         )
 
+        parser.add_argument(
+            "--bulk_upload",
+            action="store_const",
+            default=False,
+            const=True,
+            help="upload to the database in bulk",
+        )
+
         arguments = parser.parse_args(self.argv[1:])
         random.seed(arguments.seed)
 
@@ -177,7 +185,8 @@ class CLI:
                              database_crap_labels=arguments.database_crap_labels,
                              mage_project_name=arguments.mage_project,
                              mage_pipeline=arguments.mage_pipeline,
-                             queries=arguments.queries
+                             queries=arguments.queries,
+                             bulk_upload=arguments.bulk_upload
                              )
 
         good_crap.run()

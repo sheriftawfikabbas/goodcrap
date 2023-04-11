@@ -1,0 +1,10 @@
+{
+    "db_type": "snowflake",
+    "snowflake_database":"GOODCRAP",
+    "snowflake_warehouse":"WH",
+    "snowflake_user":"user",
+    "snowflake_password":"password",
+    "snowflake_account":"account",
+    "snowflake_schema":"public",
+    "snowflake_role":"role"
+}

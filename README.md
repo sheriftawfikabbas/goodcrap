@@ -61,6 +61,16 @@ For every table `mytable` you want to fill with random values, you must provide 
 - a file `mytable.crap_labels.json`: this file tells `goodcrap` what sort of random values to generate for each record
 - a sample database table or `csv` file with matching structure and with some values: `goodcrap` will learn how to generate new random values based on the sample values
 
+### Supported destinations
+
+Currently, `goodcrap` can write data to the following destinations:
+- MySQL
+- SQLite
+- Snowflake
+- `csv` file
+- `json` file
+- `parquet` file
+
 ### Template data structures
 
 `goodcrap` has a number of template tables and databases that you can use. They are in the `templates/` directory.
@@ -200,6 +210,27 @@ def test_output(output, *args) -> None:
 `goodcrap --size 1000 --seed 3 --database_config examples\mysql_config --template_database customers_orders --mage_pipeline`
 
 Note that `goodcrap` currently will only generate `Mage` projects if the database configurations are defined.
+
+## Writing to Snowflake
+
+`goodcrap` supports writing your random table to Snowflake using two methods:
+- row-by-row, which can be done by setting Snowflake as your database in the database configuration file
+- bulk upload of the generated `pandas DataFrame`, which is enabled by the command line argument `--bulk_upload`.
+
+The bulk upload is obviously preferred. Below is an example configuration settings file:
+
+```json
+{
+    "db_type": "snowflake",
+    "snowflake_database":"GOODCRAP",
+    "snowflake_warehouse":"WH",
+    "snowflake_user":"user",
+    "snowflake_password":"password",
+    "snowflake_account":"account",
+    "snowflake_schema":"public",
+    "snowflake_role":"role"
+}
+```
 
 ## Data warehouses
 

@@ -2,9 +2,11 @@ import json
 import os
 from .databases.sqlite import SQLite
 from .databases.mysql import MySQL
+from .databases.snowflake import Snowflake
 from .random_mapper import RandomMapper
 from .pipelines.mage import MageProject
 from . import templates
+
 
 class GoodCrap:
     seed = None
@@ -25,7 +27,8 @@ class GoodCrap:
         database_crap_labels=None,
         mage_project_name=None,
         mage_pipeline=None,
-        queries=False
+        queries=False,
+        bulk_upload=False
     ) -> None:
         GoodCrap.seed = seed
         self.size = size
@@ -41,6 +44,7 @@ class GoodCrap:
         self.mage_project_name = mage_project_name
         self.mage_pipeline = mage_pipeline
         self.queries = queries
+        self.bulk_upload = bulk_upload
 
         self.templates_path = os.path.dirname(templates.__file__)
 
@@ -67,11 +71,14 @@ class GoodCrap:
             database_config['to_json'] = self.to_json
             database_config['to_parquet'] = self.to_parquet
             database_config['queries'] = self.queries
+            database_config['bulk_upload'] = self.bulk_upload
             self.database_config = database_config
             if database_config['db_type'] == 'sqlite':
                 self.database_instance = SQLite(database_config)
             elif database_config['db_type'] == 'mysql':
                 self.database_instance = MySQL(database_config)
+            elif database_config['db_type'] == 'snowflake':
+                self.database_instance = Snowflake(database_config)
 
             if self.database_instance is not None:
                 self.database_instance.set_size(self.size)
@@ -214,9 +221,8 @@ class GoodCrap:
 
         else:
             # Set the project name as the database name plus a random string
-            import uuid
             self.mage_project_name = self.database_config['database']
-            self.mage_project_name += '-' + str(uuid.uuid4())[:8]
+            self.mage_project_name += '-' + self.get_random_filename()
             self.create_mage_project()
             if table_sql is not None and table_crap_labels is not None:
                 table_name = os.path.basename(
@@ -234,6 +240,10 @@ class GoodCrap:
                 for table_name in database_crap_labels.keys():
                     self.create_mage_pipeline(
                         table_name, database_crap_labels[table_name])
+
+    def get_random_filename():
+        import uuid
+        return str(uuid.uuid4())[:8]
 
     def _is_run_with_mage(self):
         return self.mage_pipeline is not None
