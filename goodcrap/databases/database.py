@@ -17,7 +17,6 @@ class DataBase:
         self.connection = None
         self.engine = None
         self.native = False
-        
 
     def set_size(self, size):
         self.size = size
@@ -40,7 +39,7 @@ class DataBase:
             with open(table_sql, 'r') as f:
                 self.table_sql = f.read()
                 f.close()
-            
+
             # sqlalchemy.inspect(self.engine).has_table(table_name)
 
             self.execute_sql(self.table_sql)
@@ -51,7 +50,7 @@ class DataBase:
             fm = RandomMapper(self.seed, table_crap_labels,
                               table, engine=self.engine)
             data_csv = []
-            for i in range(self.size):
+            for _ in range(self.size):
                 row = fm.get_crap()
                 if not self.database_config['bulk_upload']:
                     self.insert(table_name=table_name, row=row, table=table)
@@ -74,7 +73,7 @@ class DataBase:
             self.connection.execute(self.database_sql)
             metadata = MetaData(bind=self.engine)
             rounds = 10
-            for i in range(rounds):
+            for _ in range(rounds):
                 for table_name in self.engine.table_names():
                     table = Table(table_name, metadata, autoload=True)
 
@@ -82,7 +81,7 @@ class DataBase:
                         self.seed, database_crap_labels[table_name], table, self.engine)
 
                     data_csv = []
-                    for i in range(int(self.size/rounds)):
+                    for _ in range(int(self.size/rounds)):
                         row = fm.get_crap()
                         self.insert(table_name=table_name, row=row, table=table)
                         if self.database_config['to_csv']:
@@ -92,13 +91,14 @@ class DataBase:
                         df.to_csv(table_name+'.csv')
         if 'queries' in self.database_config.keys():
             with open('queries.sql', 'w') as f:
-                for i in range(self.database_config['queries']):
+                for _ in range(self.database_config['queries']):
                     f.write(str(queries.crapper(self.engine))+'\n')
                     f.flush()
                 f.close()
 
     def bulk_upload(self, df, table_name):
-        print('Bulk upload is not implemented yet for', self.database_config['db_type'])
+        print('Bulk upload is not implemented yet for',
+              self.database_config['db_type'])
 
     def execute(self, sql):
         return self.engine.execute(sql)
