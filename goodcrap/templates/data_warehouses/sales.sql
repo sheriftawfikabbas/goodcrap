@@ -1,112 +1,112 @@
 /*
- This data warehouse is greatly inspired by the Oracle sample data warehouse:
- https://docs.oracle.com/cd/A91034_01/DOC/server.901/a90237/appb.htm
+ This snowflake-type data warehouse is greatly inspired by the oracle sample data warehouse:
+ https://docs.oracle.com/cd/a91034_01/doc/server.901/a90237/appb.htm
  */
 /*Dimension: times */
-CREATE TABLE times (
-    time_id date,
-    day_name varchar(9) NOT NULL,
-    day_number_in_week int(1) NOT NULL,
-    day_number_in_month int(2) NOT NULL,
-    calendar_week_number int(2) NOT NULL,
-    week_ending_day date NOT NULL,
-    calendar_month_number int(2) NOT NULL,
-    days_in_cal_month int NOT NULL,
-    end_of_cal_month date NOT NULL,
-    calendar_month_name varchar(9) NOT NULL,
-    days_in_cal_quarter int NOT NULL,
-    end_of_cal_quarter date NOT NULL,
-    calendar_quarter_number int(1) NOT NULL,
-    calendar_year int(4) NOT NULL,
-    days_in_cal_year int NOT NULL,
-    end_of_cal_year date NOT NULL,
-    PRIMARY KEY (time_id)
-) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+create table times (
+    time_id date not null,
+    day_name varchar(9) not null,
+    day_number_in_week int not null,
+    day_number_in_month int not null,
+    calendar_week_number int not null,
+    week_ending_day date not null,
+    calendar_month_number int not null,
+    days_in_cal_month int not null,
+    end_of_cal_month date not null,
+    calendar_month_name varchar(9) not null,
+    days_in_cal_quarter int not null,
+    end_of_cal_quarter date not null,
+    calendar_quarter_number int not null,
+    calendar_year int not null,
+    days_in_cal_year int not null,
+    end_of_cal_year date not null,
+    primary key (time_id)
+);
 
 /*Dimension: channels */
-CREATE TABLE channels (
-    channel_id int,
-    channel_desc varchar(20) NOT NULL,
+create table channels (
+    channel_id int not null,
+    channel_desc varchar(20) not null,
     channel_class varchar(20),
-    PRIMARY KEY (channel_id)
+    primary key (channel_id)
 );
 
 /*Dimension: promotions */
-CREATE TABLE promotions (
-    promo_id int(11),
-    promo_name varchar(20) NOT NULL,
-    promo_subcategory varchar(30) NOT NULL,
-    promo_category varchar(30) NOT NULL,
-    promo_cost decimal(10, 2) NOT NULL,
-    promo_begin_date DATE NOT NULL,
-    promo_end_date DATE NOT NULL,
-    PRIMARY KEY (promo_id)
+create table promotions (
+    promo_id int not null,
+    promo_name varchar(20) not null,
+    promo_subcategory varchar(30) not null,
+    promo_category varchar(30) not null,
+    promo_cost real not null,
+    promo_begin_date date not null,
+    promo_end_date date not null,
+    primary key (promo_id)
 );
 
 /*Dimension: countries */
-CREATE TABLE countries (
-    country_id CHAR(2),
-    country_name varchar(40) NOT NULL,
+create table countries (
+    country_id char(2),
+    country_name varchar(40) not null,
     country_subregion varchar(30),
     country_region varchar(20),
-    country_continent varchar(20)
+    country_continent varchar(20),
+    primary key (country_id)
 );
 
 /*Dimension: customers */
-CREATE TABLE customers (
-    cust_id int(11),
-    cust_first_name varchar(20) NOT NULL,
-    cust_last_name varchar(40) NOT NULL,
-    cust_gender CHAR(1),
-    cust_year_of_birth int(4),
+create table customers (
+    cust_id int,
+    cust_first_name varchar(20) not null,
+    cust_last_name varchar(40) not null,
+    cust_gender char(1),
+    cust_year_of_birth int,
     cust_marital_status varchar(20),
-    cust_street_address varchar(40) NOT NULL,
-    cust_postal_code varchar(10) NOT NULL,
-    cust_city varchar(30) NOT NULL,
+    cust_street_address varchar(40) not null,
+    cust_postal_code varchar(10) not null,
+    cust_city varchar(30) not null,
     cust_state_province varchar(40),
-    country_id CHAR(2) NOT NULL,
+    country_id char(2) not null,
     cust_phone_number varchar(25),
     cust_income varchar(30),
     cust_credit_limit real,
-    cust_email varchar(30)
+    cust_email varchar(30),
+    primary key (cust_id),
+    constraint fk_customers_countries foreign key (country_id) references countries (country_id)
 );
 
 /*Dimension: products */
-CREATE TABLE products (
-    prod_id int(11),
-    prod_name varchar(50) NOT NULL,
-    prod_desc text NOT NULL,
-    prod_subcategory text NOT NULL,
-    prod_subcat_desc varchar(2000) NOT NULL,
-    prod_category varchar(50) NOT NULL,
-    prod_cat_desc varchar(2000) NOT NULL,
+create table products (
+    prod_id int,
+    prod_name varchar(50) not null,
+    prod_desc text not null,
+    prod_subcategory text not null,
+    prod_subcat_desc text not null,
+    prod_category varchar(50) not null,
+    prod_cat_desc text not null,
     prod_weight_class int,
     prod_unit_of_measure varchar(20),
     prod_pack_size varchar(30),
-    supplier_id int(6),
-    prod_status varchar(20) NOT NULL,
-    prod_list_price decimal(8, 2) NOT NULL,
-    prod_min_price decimal(8, 2) NOT NULL
+    supplier_id int,
+    prod_status varchar(20) not null,
+    prod_list_price real not null,
+    prod_min_price real not null,
+    primary key (prod_id)
 );
 
-/*Dimension: sales */
-CREATE TABLE sales (
-    prod_id int(11) NOT NULL,
-    cust_id int(11) NOT NULL,
-    time_id date NOT NULL,
-    channel_id int NOT NULL,
-    promo_id int(11),
-    quantity_sold int(11) NOT NULL,
-    amount decimal(10, 2) NOT NULL,
-    cost decimal(10, 2) NOT NULL
+/*Fact: sales */
+create table sales (
+    sale_id int not null,
+    prod_id int not null,
+    cust_id int not null,
+    time_id date not null,
+    channel_id int not null,
+    promo_id int,
+    quantity_sold int not null,
+    amount real not null,
+    cost real not null,
+    primary key (sale_id),
+    constraint fk_sales_product foreign key (prod_id) references products (prod_id),
+    constraint fk_sales_customer foreign key (cust_id) references customers (cust_id),
+    constraint fk_sales_time foreign key (time_id) references times (time_id),
+    constraint fk_sales_channel foreign key (channel_id) references channels (channel_id)
 );
-
-ALTER TABLE
-    sales
-ADD
-    (
-        CONSTRAINT sales_product_fk FOREIGN KEY (prod_id) REFERENCES products,
-        CONSTRAINT sales_customer_fk FOREIGN KEY (cust_id) REFERENCES customers,
-        CONSTRAINT sales_time_fk FOREIGN KEY (time_id) REFERENCES times,
-        CONSTRAINT sales_channel_fk FOREIGN KEY (channel_id) REFERENCES channels
-    );
