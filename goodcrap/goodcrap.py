@@ -256,7 +256,7 @@ class GoodCrap:
             fm = RandomMapper(
                 self.seed, table_crap_labels)
             data_csv = []
-            for i in range(int(self.size)):
+            for _ in range(int(self.size)):
                 data_csv += [fm.get_crap()]
             df = pd.DataFrame(data_csv, columns=table_crap_labels.keys())
             if self.to_json:
@@ -294,7 +294,7 @@ class GoodCrap:
             fm = RandomMapper(
                 self.seed, table_crap_labels)
         data_csv = []
-        for i in range(int(self.size)):
+        for _ in range(int(self.size)):
             data_csv += [fm.get_crap()]
         return pd.DataFrame(data_csv, columns=table_crap_labels.keys())
 
