@@ -1,96 +1,149 @@
 {
-"times":{
-    time_id date not null,
-    day_name varchar(9) not null,
-    day_number_in_week int not null,
-    day_number_in_month int not null,
-    calendar_week_number int not null,
-    week_ending_day date not null,
-    calendar_month_number int not null,
-    days_in_cal_month int not null,
-    end_of_cal_month date not null,
-    calendar_month_name varchar(9) not null,
-    days_in_cal_quarter int not null,
-    end_of_cal_quarter date not null,
-    calendar_quarter_number int not null,
-    calendar_year int not null,
-    days_in_cal_year int not null,
-    end_of_cal_year date not null,
-    primary key (time_id)
-},
-"channels": {
-    channel_id int not null,
-    channel_desc varchar(20) not null,
-    channel_class varchar(20),
-    primary key (channel_id)
-},
-"promotions": {
-    promo_id int not null,
-    promo_name varchar(20) not null,
-    promo_subcategory varchar(30) not null,
-    promo_category varchar(30) not null,
-    promo_cost real not null,
-    promo_begin_date date not null,
-    promo_end_date date not null,
-    primary key (promo_id)
-},
-"countries": {
-    country_id char(2),
-    country_name varchar(40) not null,
-    country_subregion varchar(30),
-    country_region varchar(20),
-    country_continent varchar(20),
-    primary key (country_id)
-},
-"customers": {
-    cust_id int,
-    cust_first_name varchar(20) not null,
-    cust_last_name varchar(40) not null,
-    cust_gender char(1),
-    cust_year_of_birth int,
-    cust_marital_status varchar(20),
-    cust_street_address varchar(40) not null,
-    cust_postal_code varchar(10) not null,
-    cust_city varchar(30) not null,
-    cust_state_province varchar(40),
-    country_id char(2) not null,
-    cust_phone_number varchar(25),
-    cust_income varchar(30),
-    cust_credit_limit real,
-    cust_email varchar(30),
-    primary key (cust_id),
-},
-"products": {
-    prod_id int,
-    prod_name varchar(50) not null,
-    prod_desc text not null,
-    prod_subcategory text not null,
-    prod_subcat_desc text not null,
-    prod_category varchar(50) not null,
-    prod_cat_desc text not null,
-    prod_weight_class int,
-    prod_unit_of_measure varchar(20),
-    prod_pack_size varchar(30),
-    supplier_id int,
-    prod_status varchar(20) not null,
-    prod_list_price real not null,
-    prod_min_price real not null,
-    primary key (prod_id)
-},
-"sales": {
-    sale_id int not null,
-    prod_id int not null,
-    cust_id int not null,
-    time_id date not null,
-    channel_id int not null,
-    promo_id int,
-    quantity_sold int not null,
-    amount real not null,
-    cost real not null,
-    primary key (sale_id),
-    constraint fk_sales_product foreign key (prod_id) references products (prod_id),
-    constraint fk_sales_customer foreign key (cust_id) references customers (cust_id),
-    constraint fk_sales_time foreign key (time_id) references times (time_id),
-    constraint fk_sales_channel foreign key (channel_id) references channels (channel_id)
-}
+    "times": {
+        "time_id": "date",
+        "day_name": "goodcrap_day_name",
+        "day_number": "goodcrap_day_number",
+        "day_number_in_month": "goodcrap_day_number_in_month",
+        "calendar_week_number": "goodcrap_calendar_week_number",
+        "week_ending_day": "date",
+        "calendar_month_number": "goodcrap_calendar_month_number",
+        "days_in_cal_month": "goodcrap_days_in_cal_month",
+        "end_of_cal_month": "goodcrap_",
+        "calendar_month_name": "goodcrap_",
+        "days_in_cal_quarter": "goodcrap_",
+        "end_of_cal_quarter": "date",
+        "calendar_quarter_number": "goodcrap_",
+        "calendar_year": "goodcrap_",
+        "days_in_cal_year": "goodcrap_",
+        "end_of_cal_year": "date"
+    },
+    "channels": {
+        "channel_id": "goodcrap_auto",
+        "channel_desc": {
+            "type": "text",
+            "size": 20
+        },
+        "channel_class": {
+            "type": "text",
+            "size": 20
+        }
+    },
+    "promotions": {
+        "promo_id": "goodcrap_auto",
+        "promo_name": {
+            "type": "text",
+            "size": 20
+        },
+        "promo_subcategory": {
+            "type": "text",
+            "size": 30
+        },
+        "promo_category": {
+            "type": "text",
+            "size": 30
+        },
+        "promo_cost": {
+            "type": "random_real",
+            "min": 0,
+            "max": 10000
+        },
+        "promo_begin_date": "date",
+        "promo_end_date": "date"
+    },
+    "countries": {
+        "country_id": "goodcrap_auto",
+        "country_name": "goodcrap_country",
+        "country_subregion": "goodcrap_city",
+        "country_region": "goodcrap_region",
+        "country_continent": "goodcrap_continent"
+    },
+    "customers": {
+        "cust_id": "goodcrap_auto",
+        "cust_first_name": "first_name",
+        "cust_last_name": "last_name",
+        "cust_gender": "goodcrap_gender",
+        "cust_year_of_birth": "year",
+        "cust_marital_status": "word",
+        "cust_street_address": "address",
+        "cust_postal_code": "postalcode",
+        "cust_city": "city",
+        "cust_state_province": "state",
+        "country_id": "",
+        "cust_phone_number": "phone_number",
+        "cust_income": {
+            "type": "random_int",
+            "min": 0,
+            "max": 10000,
+            "multiplier": 10
+        },
+        "cust_credit_limit": {
+            "type": "random_int",
+            "min": 0,
+            "max": 10000,
+            "multiplier": 10
+        },
+        "cust_email": "email"
+    },
+    "products": {
+        "prod_id": "goodcrap_auto",
+        "prod_name": {
+            "type": "text",
+            "size": 50
+        },
+        "prod_desc": "text",
+        "prod_subcategory": "text",
+        "prod_subcat_desc": "text",
+        "prod_category": {
+            "type": "text",
+            "size": 50
+        },
+        "prod_cat_desc": "text",
+        "prod_weight_class": "random_int",
+        "prod_unit_of_measure": {
+            "type": "text",
+            "size": 20
+        },
+        "prod_pack_size": {
+            "type": "text",
+            "size": 30
+        },
+        "supplier_id": "",
+        "prod_status": {
+            "type": "text",
+            "size": 20
+        },
+        "prod_list_price": {
+            "type": "random_real",
+            "min": 0,
+            "max": 10000
+        },
+        "prod_min_price": {
+            "type": "random_real",
+            "min": 0,
+            "max": 10000
+        }
+    },
+    "sales": {
+        "sale_id": "goodcrap_auto",
+        "prod_id": "",
+        "cust_id": "",
+        "time_id": "",
+        "channel_id": "",
+        "promo_id": "",
+        "quantity_sold": {
+            "type": "random_int",
+            "min": 0,
+            "max": 1000
+        },
+        "amount": {
+            "type": "random_real",
+            "min": 0,
+            "max": 10000
+        },
+        "cost": {
+            "type": "random_real",
+            "min": 0,
+            "max": 10000
+        }
+    }
 }

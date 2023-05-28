@@ -67,7 +67,7 @@ create table customers (
     cust_state_province varchar(40),
     country_id char(2) not null,
     cust_phone_number varchar(25),
-    cust_income varchar(30),
+    cust_income real,
     cust_credit_limit real,
     cust_email varchar(30),
     primary key (cust_id),

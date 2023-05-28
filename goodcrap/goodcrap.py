@@ -309,3 +309,6 @@ class GoodCrap:
             seed=self.seed, size=self.size,
             table_name=table_name,
             crap_labels=crap_labels)
+    
+    def generate_like(self, df):
+        pass
