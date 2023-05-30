@@ -2,6 +2,7 @@ import random
 from sqlalchemy import MetaData, Table, select, desc
 from sqlalchemy.engine.default import DefaultDialect
 from sqlalchemy.sql.sqltypes import String, DateTime, NullType, Date
+
 PY3 = str is not bytes
 text = str if PY3 else unicode
 int_type = int if PY3 else (int, long)
@@ -14,8 +15,6 @@ https://stackoverflow.com/questions/5631078/sqlalchemy-print-the-actual-query
 
 
 class StringLiteral(String):
-    """Teach SA how to literalize various things."""
-
     def literal_processor(self, dialect):
         super_processor = super(StringLiteral, self).literal_processor(dialect)
 

@@ -3,8 +3,8 @@ import os
 import random
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, TextIO, TypeVar, Union
-from . import VERSION
+from typing import Optional
+from goodcrap import VERSION
 
 
 class CLI:

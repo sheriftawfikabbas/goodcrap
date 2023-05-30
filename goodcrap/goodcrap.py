@@ -1,11 +1,16 @@
 import json
 import os
-from .databases.sqlite import SQLite
-from .databases.mysql import MySQL
-from .databases.snowflake import Snowflake
-from .random_mapper import RandomMapper
-from .pipelines.mage import MageProject
-from . import templates
+from typing import Union, List
+from numpy.typing import ArrayLike
+import pandas as pd
+import numpy as np
+from goodcrap.databases.sqlite import SQLite
+from goodcrap.databases.mysql import MySQL
+from goodcrap.databases.snowflake import Snowflake
+from goodcrap.random_mapper import RandomMapper
+from goodcrap.imitator import Imitator
+from goodcrap.pipelines.mage import MageProject
+from goodcrap import templates
 
 
 class GoodCrap:
@@ -28,7 +33,8 @@ class GoodCrap:
         mage_project_name=None,
         mage_pipeline=None,
         queries=False,
-        bulk_upload=False
+        bulk_upload=False,
+        imitate_data: Union[str, List, ArrayLike, pd.DataFrame, np.ndarray] = None
     ) -> None:
         GoodCrap.seed = seed
         self.size = size
@@ -45,6 +51,7 @@ class GoodCrap:
         self.mage_pipeline = mage_pipeline
         self.queries = queries
         self.bulk_upload = bulk_upload
+        self.imitate_data = imitate_data
 
         self.templates_path = os.path.dirname(templates.__file__)
 
@@ -93,20 +100,45 @@ class GoodCrap:
         - template_table, or
         - template_database
         '''
-        if self.template_table is not None:
-            self.run_template_table()
-        elif self.template_database is not None:
-            self.run_template_database()
-        elif self.table_crap_labels is not None:
-            self.run_table()
-        elif self.database_sql is not None and self.database_crap_labels is not None:
-            self.run_database()
-        elif self.table_sql is None and self.table_crap_labels is not None\
-                and self.database_instance is None:
-            table_name = os.path.basename(
-                self.table_crap_labels).replace('.json', '')
-            self.write_file(table_name=table_name,
-                            table_crap_labels=self.table_crap_labels)
+        if self.imitate_data is None:
+            if self.template_table is not None:
+                self.run_template_table()
+            elif self.template_database is not None:
+                self.run_template_database()
+            elif self.table_crap_labels is not None:
+                self.run_table()
+            elif self.database_sql is not None and self.database_crap_labels is not None:
+                self.run_database()
+            elif self.table_sql is None and self.table_crap_labels is not None\
+                    and self.database_instance is None:
+                table_name = os.path.basename(
+                    self.table_crap_labels).replace('.json', '')
+                self.write_file(table_name=table_name,
+                                table_crap_labels=self.table_crap_labels)
+            else:
+                raise Exception('Incorrect parameter settings. What exactly do you want to do?')
+        else:
+            if isinstance(self.imitate_data, str) and self.database_instance is not None:
+                self._imitate_database_table_data()
+            elif isinstance(self.imitate_data, str) and self.database_instance is None:
+                raise Exception(
+                    'Must specify a database in order to imitate the data in one of its tables.')
+            elif isinstance(self.imitate_data, pd.DataFrame | np.ndarray):
+                self._imitate_dataframe_data()
+            else:
+                raise Exception('Data imitation for ' +
+                                type(self.imitate_data)+' not yet implemented.')
+
+    def _imitate_database_table_data(self):
+        raise Exception(
+            'Imitating database table data has not yet been implemented.')
+
+    def _imitate_dataframe_data(self):
+        '''
+
+        '''
+        imitator = Imitator(self.imitate_data)
+
 
     def run_template_table(self):
         if self.database_instance is not None:
@@ -309,6 +341,6 @@ class GoodCrap:
             seed=self.seed, size=self.size,
             table_name=table_name,
             crap_labels=crap_labels)
-    
+
     def generate_like(self, df):
         pass

@@ -1,6 +1,6 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, select
+from sqlalchemy import MetaData, Table, select
 import faker
-from .crappers import crapper, crapper_unique
+from goodcrap.crappers import crapper, crapper_unique
 
 fake = faker.Faker('en-US')
 
