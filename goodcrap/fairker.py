@@ -1,6 +1,5 @@
 import random
 from faker import Faker as Unfairker
-fake = Unfairker()
 
 
 names_male = [
@@ -69,21 +68,21 @@ names_female = [
     "Zeina",
 ]
 
-class Faker:
+class Faker(Unfairker): 
     def first_name_male(self):
         if random.random()>0.5:
             return random.sample(names_male,1)[0]
         else:
-            return fake.first_name_male()
+            return super().first_name_male()
     def first_name_female(self):
         if random.random()>0.5:
             return random.sample(names_female,1)[0]
         else:
-            return fake.first_name_female()
+            return super().first_name_female()
     def first_name(self):
         if random.random()>0.5:
             return self.first_name_male()
         else:
-            return self.first_name_female()
+            return super().first_name_female()
         
         
