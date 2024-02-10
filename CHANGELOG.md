@@ -1,6 +1,10 @@
 ## Changelog
 
 
+### 0.2.4 - 2024-02-08
+
+* Added the Fairker module
+
 ### 0.2.0 - 2023-04-07
 
 * Added Mage integration

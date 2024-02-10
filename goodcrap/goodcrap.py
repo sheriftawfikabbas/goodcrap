@@ -52,6 +52,7 @@ class GoodCrap:
         self.queries = queries
         self.bulk_upload = bulk_upload
         self.imitate_data = imitate_data
+        self.imitator = None
 
         self.templates_path = os.path.dirname(templates.__file__)
 
@@ -128,6 +129,7 @@ class GoodCrap:
             else:
                 raise Exception('Data imitation for ' +
                                 type(self.imitate_data)+' not yet implemented.')
+        return self
 
     def _imitate_database_table_data(self):
         raise Exception(
@@ -137,7 +139,7 @@ class GoodCrap:
         '''
 
         '''
-        imitator = Imitator(self.imitate_data)
+        self.imitator = Imitator(self.imitate_data)
 
 
     def run_template_table(self):
@@ -254,7 +256,7 @@ class GoodCrap:
         else:
             # Set the project name as the database name plus a random string
             self.mage_project_name = self.database_config['database']
-            self.mage_project_name += '-' + self.get_random_filename()
+            self.mage_project_name += '-' + self._get_random_filename()
             self.create_mage_project()
             if table_sql is not None and table_crap_labels is not None:
                 table_name = os.path.basename(
@@ -273,7 +275,7 @@ class GoodCrap:
                     self.create_mage_pipeline(
                         table_name, database_crap_labels[table_name])
 
-    def get_random_filename():
+    def _get_random_filename():
         import uuid
         return str(uuid.uuid4())[:8]
 
@@ -312,23 +314,28 @@ class GoodCrap:
             table_name = self.template_table
             self._set_template_table_variables()
             table_crap_labels = self.table_crap_labels
-        if isinstance(table_crap_labels, str):
-            with open(table_crap_labels, 'r') as f:
-                table_crap_labels = json.load(f)
-                f.close()
-        if self.database_instance is not None:
-            from sqlalchemy import MetaData, Table
-            metadata = MetaData(bind=self.database_instance.engine)
-            table = Table(table_name, metadata, autoload=True)
-            fm = RandomMapper(self.seed, table_crap_labels,
-                              table, engine=self.database_instance.engine)
+        if table_crap_labels is not None and table_name is not None:
+            if isinstance(table_crap_labels, str):
+                with open(table_crap_labels, 'r') as f:
+                    table_crap_labels = json.load(f)
+                    f.close()
+            if self.database_instance is not None:
+                from sqlalchemy import MetaData, Table
+                metadata = MetaData(bind=self.database_instance.engine)
+                table = Table(table_name, metadata, autoload=True)
+                fm = RandomMapper(self.seed, table_crap_labels,
+                                table, engine=self.database_instance.engine)
+            else:
+                fm = RandomMapper(
+                    self.seed, table_crap_labels)
+            data_csv = []
+            for _ in range(int(self.size)):
+                data_csv += [fm.get_crap()]
+            return pd.DataFrame(data_csv, columns=table_crap_labels.keys())
+        elif self.imitator is not None:
+            return self.imitator.get_crap(self.size)
         else:
-            fm = RandomMapper(
-                self.seed, table_crap_labels)
-        data_csv = []
-        for _ in range(int(self.size)):
-            data_csv += [fm.get_crap()]
-        return pd.DataFrame(data_csv, columns=table_crap_labels.keys())
+            raise Exception('Feature not implemented.')
 
     def create_mage_project(self):
         self.mage_project = MageProject(

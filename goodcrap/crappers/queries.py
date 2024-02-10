@@ -3,10 +3,14 @@ from sqlalchemy import MetaData, Table, select, desc
 from sqlalchemy.engine.default import DefaultDialect
 from sqlalchemy.sql.sqltypes import String, DateTime, NullType, Date
 
-PY3 = str is not bytes
-text = str if PY3 else unicode
-int_type = int if PY3 else (int, long)
-str_type = str if PY3 else (str, unicode)
+# PY3 = str is not bytes
+# text = str if PY3 else unicode
+# int_type = int if PY3 else (int, long)
+# str_type = str if PY3 else (str, unicode)
+
+text = str
+int_type = int
+str_type = str
 
 '''
 Literalizing statement strings is obtained from the answer of: 
