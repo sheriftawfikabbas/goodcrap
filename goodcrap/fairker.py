@@ -103,16 +103,18 @@ class Faker(Unfairker):
         if random.random() > 0.5:
             return random.sample(names_male, 1)[0]
         else:
-            return super().first_name_male()
-
+            return super().__getattr__('first_name_male')()
+        
     def first_name_female(self):
         if random.random() > 0.5:
             return random.sample(names_female, 1)[0]
         else:
-            return super().first_name_female()
-
+            return super().__getattr__('first_name_female')()
+        
     def first_name(self):
         if random.random() > 0.5:
             return self.first_name_male()
         else:
             return self.first_name_female()
+        
+        
